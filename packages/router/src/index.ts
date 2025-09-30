@@ -1,6 +1,7 @@
 export { createWebHistory } from './history/html5'
 export { createCrossDomainWebHistory } from './history/crossDomain'
 export { createMemoryHistory } from './history/memory'
+export { createCrossDomainMemoryHistory } from './history/crossDomainMemory'
 export { createWebHashHistory } from './history/hash'
 export { createRouterMatcher } from './matcher'
 export type { RouterMatcher } from './matcher'

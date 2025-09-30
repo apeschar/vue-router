@@ -222,6 +222,12 @@ describe('Memory history', () => {
     expect(history.location).toBe('/nl/abc?qed=1')
   })
 
+  it('ignores unknown domains', () => {
+    const history = createHistory()
+    history.push('http://whatever.net/abc')
+    expect(history.location).toBe('/abc')
+  })
+
   it('uses the domain in createHref', () => {
     const history = createHistory()
     expect(history.createHref('/nl/abc')).toEqual('http://example.nl/abc')
