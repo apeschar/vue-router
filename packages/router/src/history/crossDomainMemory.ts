@@ -11,19 +11,19 @@ import {
 } from './common'
 import { Origins, addDomainPrefix, externalUrl } from './crossDomain'
 
+interface MyRouterHistory extends RouterHistory {
+  setLocation(to: HistoryLocation): void
+}
+
 export function createCrossDomainMemoryHistory(
   origins: Origins = {}
-): RouterHistory {
+): MyRouterHistory {
   let listeners: NavigationCallback[] = []
   let queue: [url: HistoryLocation, state: HistoryState][] = [[START, {}]]
   let position: number = 0
   const base = normalizeBase(undefined)
 
   function setLocation(location: HistoryLocation, state: HistoryState = {}) {
-    if (/^https?:\/\//.test(location)) {
-      const url = new URL(location)
-      location = addDomainPrefix(origins, url.origin, url.pathname + url.search)
-    }
     position++
     if (position !== queue.length) {
       // we are in the middle, we remove everything from here in the queue
@@ -47,7 +47,7 @@ export function createCrossDomainMemoryHistory(
     }
   }
 
-  const routerHistory: RouterHistory = {
+  const routerHistory: MyRouterHistory = {
     // rewritten by Object.defineProperty
     location: START,
     // rewritten by Object.defineProperty
@@ -64,6 +64,14 @@ export function createCrossDomainMemoryHistory(
 
     push(to, state?: HistoryState) {
       setLocation(to, state)
+    },
+
+    setLocation(to: string) {
+      if (/^https?:\/\//.test(to)) {
+        const url = new URL(to)
+        to = addDomainPrefix(origins, url.origin, url.pathname + url.search)
+      }
+      setLocation(to)
     },
 
     listen(callback) {

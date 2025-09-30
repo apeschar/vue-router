@@ -206,25 +206,19 @@ describe('Memory history', () => {
 
   it('handles origins with push', () => {
     const history = createHistory()
-    history.push('http://example.nl/abc')
-    expect(history.location).toBe('/nl/abc')
-  })
-
-  it('handles origins with replace', () => {
-    const history = createHistory()
-    history.replace('http://example.nl/abc')
+    history.setLocation('http://example.nl/abc')
     expect(history.location).toBe('/nl/abc')
   })
 
   it('handles query strings', () => {
     const history = createHistory()
-    history.push('http://example.nl/abc?qed=1')
+    history.setLocation('http://example.nl/abc?qed=1')
     expect(history.location).toBe('/nl/abc?qed=1')
   })
 
   it('ignores unknown domains', () => {
     const history = createHistory()
-    history.push('http://whatever.net/abc')
+    history.setLocation('http://whatever.net/abc')
     expect(history.location).toBe('/abc')
   })
 
